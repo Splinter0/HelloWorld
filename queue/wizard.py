@@ -7,11 +7,8 @@ class Wizard(object):
             self.deck.append(x)
         self.table = []
     def enqueue(self, value):
-        for x in self.deck:
-            if value == x :
-                self.deck.remove(x)
-                self.deck.append(x)
-                break
+        self.deck.remove(value)
+        self.deck.append(value)
     def dequeue(self):
         self.table.append(self.deck[0])
         self.deck.remove(self.deck[0])

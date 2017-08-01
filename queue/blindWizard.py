@@ -8,11 +8,14 @@ class Queue(object):
     def enqueue(self, value):
         self.deck.append(value)
     def dequeue(self):
+        t = self.deck[0]
         self.deck.remove(self.deck[0])
-        return self.deck[0]
+        return t
     def emptyQueue(self):
         if len(self.deck) == 0 : return True
         else : return False
+
+#solution : 7 1 12 2 8 3 11 4 9 5 13 6 10
 
 def wizard():
     userOrder = raw_input("Input order of the cards (split numbers by whitespaces) : ")
@@ -24,23 +27,13 @@ def wizard():
     print "Order:", order
     w = Queue(order)
     empty = w.emptyQueue()
-
+    table = []
     while not empty:
-        """
-        print("Deck not empty")
-        w.enqueue(order[0])
-        print("Deck :", w.deck,"Table :", w.table)
-        w.dequeue()
-        print("Deck :", w.deck,"Table :", w.table)
-        """
-        try :
-            value = w.dequeue()
-            w.enqueue(value)
-            value = w.dequeue()
-        except :
-            pass
-        print(value)
+        value = w.dequeue()
+        w.enqueue(value)
+        value = w.dequeue()
+        table.append(value)
         empty = w.emptyQueue()
-    #print("Empty deck, table cards:", w.table)
+    print("Empty deck, table cards:", table)
 
 wizard()
