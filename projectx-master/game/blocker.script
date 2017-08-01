@@ -1,0 +1,22 @@
+go.property("damage", 50)
+go.property("damage_threshold", 0.5)
+
+local CONTACT_POINT_RESPONSE = hash("contact_point_response")
+local BALL = hash("ball")
+
+function on_message(self, message_id, message, sender)
+	if message_id == CONTACT_POINT_RESPONSE and message.group == BALL then
+		-- only inflict damage on the blocker if the collision distance is above a
+		-- certain value
+		if message.distance > self.damage_threshold then
+			self.damage = self.damage - 1
+			if self.damage <= 0 then
+				go.delete()
+				return
+			end
+			
+			-- play a sound and let volume depend a bit on the force/distance of the collision
+			msg.post("/game/sounds", "play", { sound = "#metal" .. math.random(1,2), gain = math.min(message.distance, 1) })
+		end
+	end
+end

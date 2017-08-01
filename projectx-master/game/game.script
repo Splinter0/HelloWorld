@@ -1,0 +1,27 @@
+local INCREASE_SCORE = hash("increase_score")
+
+local function update_score(score)
+	label.set_text("#score", tostring(score))
+end
+
+function init(self)
+	print(msg.url())
+	self.score = 0
+	update_score(self.score)
+	msg.post("@render:", "clear_color", { color = vmath.vector4(35/255,191/255,225/255, 1) })
+	self.music = true
+	msg.post("/game/sounds", "play", { sound = "#music", gain = 0.7 })
+	self.time = 0
+end
+
+--[[function update(self, dt)
+	if dt >= 187 then
+		self.music = false
+]] 
+
+function on_message(self, message_id, message, sender)
+	if message_id == INCREASE_SCORE then
+		self.score = self.score + message.score
+		update_score(self.score)
+	end
+end

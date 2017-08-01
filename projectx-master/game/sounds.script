@@ -1,0 +1,14 @@
+local PLAY = hash("play")
+
+function init(self)
+	-- Add initialization code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- hmm, maybe we need some sound gating here?
+	-- we should not allow the same sound to be played very frequently (like several times per second)
+	if message_id == PLAY then
+		msg.post(message.sound, "play_sound", { delay = 0, gain = message.gain or 1 })
+	end
+end

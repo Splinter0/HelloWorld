@@ -1,0 +1,35 @@
+go.property("power", 100)
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+function on_input(self, action_id, action)
+	-- rotate the cannon to face in the direction of the mouse pointer/finger
+	if not action_id then
+		local action_pos = vmath.vector3(action.x, action.y, 0)
+		
+		local pos = go.get_world_position()
+		local angle = -math.atan2(action_pos.x - pos.x, action_pos.y - pos.y)
+		local quat = vmath.quat_rotation_z(angle)
+		
+		go.set_rotation(quat)
+	-- shoot a ball
+	elseif action_id == hash("touch") then
+		if action.released then
+			local action_pos = vmath.vector3(action.x, action.y, 0)
+			local rot = go.get_rotation()
+			local pos = go.get_position()
+			local ball = factory.create("game#ballfactory", pos)
+			-- the force of the ball is based on the distance from the cannon to the mouse/finger
+			-- the further away the more force
+			local force = vmath.rotate(rot, vmath.vector3(0, 1, 0)) * vmath.length(pos - action_pos) * self.power
+			
+			msg.post(msg.url(nil, ball, "collisionobject"), "apply_force", { position = pos, force = force })
+		end
+	end
+end
