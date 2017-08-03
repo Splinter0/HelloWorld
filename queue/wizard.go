@@ -1,7 +1,11 @@
-package queue
+package main
 
 import (
+	"bufio"
+	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 //Node : struct
@@ -68,16 +72,26 @@ func (q *LinkedQ) insert(value int, index int) {
 	n.Next = new
 }
 
-/*
 func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Input order of the cards (split numbers by whitespaces) : ")
+	userOrder, _ := reader.ReadString('\n')
+	userOrder = strings.Split(userOrder, " ")
 	q := newLinked()
-	q.enqueue(1)
-	q.enqueue(2)
-	q.enqueue(7)
-	fmt.Println(q.getQueue())
-	q.unqueue()
-	q.enqueue(10)
-	q.enqueue(5)
-	q.insert(6, 3)
-	fmt.Println(q.getQueue())
-}*/
+	for x := range userOrder {
+		q.enqueue(strconv.Atoi(x))
+	}
+	fmt.Println("Order : " + q.getQueue())
+	var table []int
+	for {
+		if q.isEmpty() {
+			break
+		}
+		n := q.unqueue()
+		q.enqueue(n)
+		n := q.unqueue()
+		table = append(table, n)
+	}
+	fmt.Println("Deck is empty, table cards : ", table)
+
+}
